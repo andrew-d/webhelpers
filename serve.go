@@ -59,6 +59,21 @@ func ServeDirectory(dpath string) http.Handler {
 
 		dpath = filepath.Join(wd, dpath)
 	}
+
+	// Validate that this is in fact a directory.
+	f, err := os.Open(dpath)
+	if err != nil {
+		panic(err)
+	}
+	fi, err := f.Stat()
+	if err != nil {
+		panic(err)
+	}
+	if !fi.IsDir() {
+		panic(fmt.Sprintf("%s is not a directory", dpath))
+	}
+	f.Close()
+
 	dir := http.Dir(dpath)
 
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
