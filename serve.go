@@ -83,8 +83,7 @@ func ServeDirectory(dpath string) http.Handler {
 
 		f, err := dir.Open(r.URL.Path)
 		if err != nil {
-			http.Error(w, fmt.Sprintf("internal error opening file: %s", err),
-				http.StatusInternalServerError)
+			http.Error(w, "", http.StatusNotFound)
 			return
 		}
 		defer f.Close()
